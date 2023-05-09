@@ -1,56 +1,56 @@
-import { BaseDatabase } from "../../src/database/BaseDatabase"
-import { UserDB, USER_ROLES } from "../../src/types"
+import { USER_ROLES, UserDB } from "../../src/models/User";
+import { BaseDatabase } from "../../src/database/BaseDatabase";
+
+const usersMock: UserDB[] = [
+  {
+    id: "id-mock-fulano",
+    name: "Fulano",
+    email: "fulano@email.com",
+    password: "hash-mock-fulano", // senha = "fulano123"
+    created_at: new Date().toISOString(),
+    role: USER_ROLES.NORMAL
+  },
+  {
+    id: "id-mock-astrodev",
+    name: "Astrodev",
+    email: "astrodev@email.com",
+    password: "hash-mock-astrodev", // senha = "astrodev99"
+    created_at: new Date().toISOString(),
+    role: USER_ROLES.ADMIN
+  },
+]
 
 export class UserDatabaseMock extends BaseDatabase {
-    public static TABLE_USERS = "users"
+  public static TABLE_USERS = "users"
 
-    public insert = async (userDB: UserDB): Promise<void> => {
-        // não precisa retornar nada, porque é void
-    }
+  public async findUsers(
+    q: string | undefined
+  ): Promise<UserDB[]> {
+    if (q) {
+      return usersMock.filter(user =>
+          user.name.toLocaleLowerCase()
+            .includes(q.toLocaleLowerCase()))
 
-    public findByEmail = async (email: string): Promise<UserDB | undefined>  => {
-        switch (email) {
-            case "normal@email.com":
-                return {
-                    id: "id-mock",
-                    name: "Normal Mock",
-                    email: "normal@email.com",
-                    password: "hash-bananinha",
-                    created_at: new Date().toISOString(),
-                    role: USER_ROLES.NORMAL
-                }
-            case "admin@email.com":
-                return {
-                    id: "id-mock",
-                    name: "Admin Mock",
-                    email: "admin@email.com",
-                    password: "hash-bananinha",
-                    created_at: new Date().toISOString(),
-                    role: USER_ROLES.ADMIN
-                }
-            default:
-                return undefined
-        }
+    } else {
+      return usersMock
     }
+  }
 
-    public getAll = async (): Promise<UserDB[]>  => {
-        return [
-            {
-                id: "id-mock",
-                name: "Normal Mock",
-                email: "normal@email.com",
-                password: "hash-bananinha",
-                created_at: new Date().toISOString(),
-                role: USER_ROLES.NORMAL
-            },
-            {
-                id: "id-mock",
-                name: "Admin Mock",
-                email: "admin@email.com",
-                password: "hash-bananinha",
-                created_at: new Date().toISOString(),
-                role: USER_ROLES.ADMIN
-            }
-        ]
-    }
+  public async findUserById(
+    id: string
+  ): Promise<UserDB | undefined> {
+    return usersMock.filter(user => user.id === id)[0]
+  }
+
+  public async findUserByEmail(
+    email: string
+  ): Promise<UserDB | undefined> {
+    return usersMock.filter(user => user.email === email)[0]
+  }
+
+  public async insertUser(
+    newUserDB: UserDB
+  ): Promise<void> {
+
+  }
 }

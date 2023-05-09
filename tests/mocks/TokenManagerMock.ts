@@ -1,32 +1,38 @@
-import { TokenPayload, USER_ROLES } from "../../src/types"
+import { TokenPayload, USER_ROLES } from '../../src/models/User'
 
 export class TokenManagerMock {
+  public createToken = (payload: TokenPayload): string => {
+    if (payload.id === "id-mock") {
+      // signup de nova conta
+      return "token-mock"
 
-    public createToken = (payload: TokenPayload): string => {
-        if (payload.role == USER_ROLES.NORMAL) {
-            return "token-mock-normal"
-        } else {
-            return "token-mock-admin"
-        }
+    } else if (payload.id === "id-mock-fulano") {
+      // login de fulano (conta normal)
+      return "token-mock-fulano"
+
+    } else {
+      // login de astrodev (conta admin)
+      return "token-mock-astrodev"
     }
+  }
 
-    public getPayload = (token: string): TokenPayload | null => {
-        if (token == "token-mock-normal") {
-            return {
-                id: "id-mock",
-                name: "Normal Mock",
-                role: USER_ROLES.NORMAL
-            }
+  public getPayload = (token: string): TokenPayload | null => {
+    if (token === "token-mock-fulano") {
+      return {
+        id: "id-mock-fulano",
+        name: "Fulano",
+        role: USER_ROLES.NORMAL
+      }
 
-        } else if (token == "token-mock-admin") {
-            return {
-                id: "id-mock",
-                name: "Admin Mock",
-                role: USER_ROLES.ADMIN
-            }
+    } else if (token === "token-mock-astrodev") {
+      return {
+        id: "id-mock-astrodev",
+        name: "Astrodev",
+        role: USER_ROLES.ADMIN
+      }
 
-        } else {
-            return null
-        }
+    } else {
+      return null
     }
+  }
 }

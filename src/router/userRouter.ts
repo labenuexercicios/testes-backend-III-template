@@ -2,9 +2,9 @@ import express from "express"
 import { UserBusiness } from "../business/UserBusiness"
 import { UserController } from "../controller/UserController"
 import { UserDatabase } from "../database/UserDatabase"
-import { HashManager } from "../services/HashManager"
 import { IdGenerator } from "../services/IdGenerator"
 import { TokenManager } from "../services/TokenManager"
+import { HashManager } from "../services/HashManager"
 
 export const userRouter = express.Router()
 
@@ -17,6 +17,9 @@ const userController = new UserController(
     )
 )
 
+userRouter.get("/", userController.getUsers)
+
 userRouter.post("/signup", userController.signup)
 userRouter.post("/login", userController.login)
-userRouter.get("/", userController.getAll)
+userRouter.delete("/:id", userController.deleteUser)
+userRouter.get("/:id", userController.getUserById)

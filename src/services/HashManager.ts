@@ -4,7 +4,9 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 export class HashManager {
-    public async hash (plaintext: string): Promise<string> {
+    public hash = async (
+      plaintext: string
+    ): Promise<string> => {
         const rounds = Number(process.env.BCRYPT_COST)
         const salt = await bcrypt.genSalt(rounds)
         const hash = await bcrypt.hash(plaintext, salt)
@@ -12,7 +14,10 @@ export class HashManager {
         return hash
     }
 
-    public compare = async (plaintext: string, hash: string): Promise<boolean> => {
+    public compare = async (
+      plaintext: string,
+      hash: string
+    ): Promise<boolean> => {
         return bcrypt.compare(plaintext, hash)
     }
 }

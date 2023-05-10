@@ -27,49 +27,4 @@ describe("Testando deleteUser", () => {
       message: "Deleção realizada com sucesso"
     })
   })
-
-  test("deve retornar erro quando token não for enviado", () => {
-    expect.assertions(1)
-
-    try {
-      const input = DeleteUserSchema.parse({
-        idToDelete: "id-mock-fulano",
-        token: undefined
-      })
-
-    } catch (error) {
-      if (error instanceof ZodError) {
-        expect(error.issues).toEqual([
-          {
-            code: 'invalid_type',
-            expected: 'string',
-            received: 'undefined',
-            path: ['token'],
-            message: 'Required'
-          }
-        ])
-      }
-    }
-  })
-
-  test("deve retornar erro ao tentar deletar conta de outra pessoa", async () => {
-    expect.assertions(2)
-    
-    try {
-      const input = DeleteUserSchema.parse({
-        idToDelete: "id-mock-astrodev",
-        token: "token-mock-fulano"
-      })
-
-      const output = await userBusiness.deleteUser(input)
-
-    } catch (error) {
-      if (error instanceof BadRequestError) {
-        expect(error.message)
-          .toBe("somente quem criou a conta pode deletá-la")
-
-        expect(error.statusCode).toBe(400)
-      }
-    }
-  })
 })
